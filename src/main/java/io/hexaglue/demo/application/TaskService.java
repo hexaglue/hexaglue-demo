@@ -22,7 +22,7 @@ public class TaskService implements TaskUseCases {
 
     @Override
     public Task createTask(String title, String description) {
-        Task task = new Task(TaskId.generate(), title, description);
+        Task task = Task.create(TaskId.generate(), title, description);
         return taskRepository.save(task);
     }
 

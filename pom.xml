@@ -24,11 +24,9 @@
         <java.version>17</java.version>
         <maven.compiler.release>17</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <hexaglue.version>5.0.0-SNAPSHOT</hexaglue.version>
     </properties>
 
     <dependencies>
-        <!-- Spring Boot -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -37,15 +35,16 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
-
-        <!-- H2 Database -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <scope>runtime</scope>
         </dependency>
-
-        <!-- Test -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>1.6.3</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -60,62 +59,84 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
 
-            <!-- ============================================================
-                 HEXAGLUE MAVEN PLUGIN
-                 ============================================================
-                 Décommentez progressivement les sections ci-dessous pour
-                 suivre le tutoriel.
-                 ============================================================ -->
-
-            <!--
+            <!-- HEXAGLUE : Décommentez progressivement pour suivre le tutoriel -->
             <plugin>
                 <groupId>io.hexaglue</groupId>
                 <artifactId>hexaglue-maven-plugin</artifactId>
-                <version>${hexaglue.version}</version>
+                <version>5.0.0-SNAPSHOT</version>
                 <extensions>true</extensions>
                 <configuration>
                     <basePackage>io.hexaglue.demo</basePackage>
                 </configuration>
                 <dependencies>
-                    --><!-- ========================================
-                         ÉTAPE 1 : Living Documentation
-                         Décommentez pour générer la documentation
-                         ======================================== --><!--
-                    --><!--
+                    <!-- Étape 2 : Living Documentation -->
+                    <!--
                     <dependency>
                         <groupId>io.hexaglue.plugins</groupId>
                         <artifactId>hexaglue-plugin-living-doc</artifactId>
-                        <version>${hexaglue.version}</version>
+                        <version>2.0.0-SNAPSHOT</version>
                     </dependency>
-                    --><!--
-
-                    --><!-- ========================================
-                         ÉTAPE 2 : Audit d'architecture
-                         Décommentez pour activer l'audit
-                         ======================================== --><!--
-                    --><!--
+                    -->
+                    <!-- Étape 3 : Audit d'architecture -->
+                    <!--
                     <dependency>
                         <groupId>io.hexaglue.plugins</groupId>
                         <artifactId>hexaglue-plugin-audit</artifactId>
-                        <version>${hexaglue.version}</version>
+                        <version>2.0.0-SNAPSHOT</version>
                     </dependency>
-                    --><!--
-
-                    --><!-- ========================================
-                         ÉTAPE 4 : Génération JPA
-                         Décommentez pour générer l'infrastructure
-                         ======================================== --><!--
-                    --><!--
+                    -->
+                    <!-- Étape 5 : Génération JPA -->
+                    <!--
                     <dependency>
                         <groupId>io.hexaglue.plugins</groupId>
                         <artifactId>hexaglue-plugin-jpa</artifactId>
-                        <version>${hexaglue.version}</version>
+                        <version>2.0.0-SNAPSHOT</version>
                     </dependency>
-                    --><!--
+                    <dependency>
+                        <groupId>jakarta.persistence</groupId>
+                        <artifactId>jakarta.persistence-api</artifactId>
+                        <version>3.2.0</version>
+                    </dependency>
+        -           -->
                 </dependencies>
+            </plugin>
+
+            <!-- Étape 5 : Ajoute les sources générées au classpath -->
+            <!--
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.4.0</version>
+                <executions>
+                    <execution>
+                        <id>add-hexaglue-sources</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>${project.build.directory}/hexaglue/generated-sources</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             -->
 
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <version>1.6.3</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 

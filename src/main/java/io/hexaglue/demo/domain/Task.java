@@ -1,15 +1,12 @@
 package io.hexaglue.demo.domain;
 
-import java.time.Instant;
-
-// ⚠️ VIOLATION ARCHITECTURALE : import d'infrastructure dans le domaine
-// Cette dépendance vers JPA viole la pureté du domaine hexagonal.
-// L'audit HexaGlue détectera cette violation.
 import jakarta.persistence.Entity;
+import java.time.Instant;
 
 /**
  * Agrégat racine représentant une tâche.
  */
+@Entity
 public class Task {
 
     private final TaskId id;
@@ -19,16 +16,21 @@ public class Task {
     private final Instant createdAt;
     private Instant updatedAt;
 
-    public Task(TaskId id, String title, String description) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.status = TaskStatus.TODO;
-        this.createdAt = Instant.now();
-        this.updatedAt = this.createdAt;
+    /**
+     * Crée une nouvelle tâche.
+     *
+     * @param id l'identifiant de la tâche
+     * @param title le titre de la tâche
+     * @param description la description de la tâche
+     * @return une nouvelle tâche
+     */
+    public static Task create(TaskId id, String title, String description) {
+        return new Task(id, title, description, TaskStatus.TODO, Instant.now(), Instant.now());
     }
 
-    // Pour la reconstruction depuis la persistence
+    /**
+     * Constructeur pour la reconstitution depuis la persistence.
+     */
     public Task(TaskId id, String title, String description, TaskStatus status,
                 Instant createdAt, Instant updatedAt) {
         this.id = id;

@@ -32,7 +32,7 @@ class TaskRepositoryIntegrationTest {
     @DisplayName("Devrait sauvegarder et retrouver une tâche")
     void shouldSaveAndFindTask() {
         // Given
-        Task task = new Task(TaskId.generate(), "Ma première tâche", "Description de test");
+        Task task = Task.create(TaskId.generate(), "Ma première tâche", "Description de test");
 
         // When
         Task saved = taskRepository.save(task);
@@ -48,8 +48,8 @@ class TaskRepositoryIntegrationTest {
     @DisplayName("Devrait lister toutes les tâches")
     void shouldListAllTasks() {
         // Given
-        taskRepository.save(new Task(TaskId.generate(), "Tâche 1", "Description 1"));
-        taskRepository.save(new Task(TaskId.generate(), "Tâche 2", "Description 2"));
+        taskRepository.save(Task.create(TaskId.generate(), "Tâche 1", "Description 1"));
+        taskRepository.save(Task.create(TaskId.generate(), "Tâche 2", "Description 2"));
 
         // When
         List<Task> tasks = taskRepository.findAll();
@@ -62,7 +62,7 @@ class TaskRepositoryIntegrationTest {
     @DisplayName("Devrait supprimer une tâche")
     void shouldDeleteTask() {
         // Given
-        Task task = new Task(TaskId.generate(), "Tâche à supprimer", "Sera supprimée");
+        Task task = Task.create(TaskId.generate(), "Tâche à supprimer", "Sera supprimée");
         Task saved = taskRepository.save(task);
 
         // When
@@ -76,7 +76,7 @@ class TaskRepositoryIntegrationTest {
     @DisplayName("Devrait mettre à jour le statut d'une tâche")
     void shouldUpdateTaskStatus() {
         // Given
-        Task task = new Task(TaskId.generate(), "Tâche à démarrer", "Test du workflow");
+        Task task = Task.create(TaskId.generate(), "Tâche à démarrer", "Test du workflow");
         Task saved = taskRepository.save(task);
 
         // When
