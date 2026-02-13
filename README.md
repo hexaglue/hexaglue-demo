@@ -1,23 +1,22 @@
 # HexaGlue Demo
 
-Application de démonstration pour découvrir HexaGlue pas à pas.
+Application de demonstration pour decouvrir HexaGlue pas a pas.
 
-## Prérequis
+## Prerequis
 
 - Java 17+
 - Maven 3.8+
-- HexaGlue 5.0.0-SNAPSHOT installé localement (`mvn install` dans le repo hexaglue)
 
 ## Structure du projet
 
 ```
 hexaglue-demo/
-├── pom.xml                              # Configuration Maven + HexaGlue (commentée)
+├── pom.xml                              # Configuration Maven + HexaGlue
 ├── src/main/java/io/hexaglue/demo/
 │   ├── DemoApplication.java             # Application Spring Boot
 │   ├── domain/
-│   │   ├── Task.java                    # Agrégat racine (⚠️ contient une violation)
-│   │   ├── TaskId.java                  # Value Object
+│   │   ├── Task.java                    # Agregat racine (contient une violation intentionnelle)
+│   │   ├── TaskId.java                  # Value Object (record)
 │   │   └── TaskStatus.java              # Enum
 │   ├── ports/
 │   │   ├── in/TaskUseCases.java         # Port driving
@@ -25,90 +24,82 @@ hexaglue-demo/
 │   └── application/
 │       └── TaskService.java             # Service applicatif
 └── src/test/java/
-    └── TaskRepositoryIntegrationTest.java  # Tests d'intégration
+    └── TaskRepositoryIntegrationTest.java  # Tests d'integration
 ```
 
 ---
 
 ## Tutoriel
 
-### Étape 1 : Générer la Living Documentation
-
-1. Dans `pom.xml`, décommentez le plugin HexaGlue et le plugin `hexaglue-plugin-living-doc`
-2. Lancez :
-   ```bash
-   mvn clean compile
-   ```
-3. Consultez la documentation générée dans `target/hexaglue/reports/living-doc/`
-
-### Étape 2 : Activer l'Audit d'Architecture
-
-1. Dans `pom.xml`, décommentez le plugin `hexaglue-plugin-audit`
-2. Lancez :
-   ```bash
-   mvn clean verify
-   ```
-3. **Le build échoue !** L'audit détecte une violation :
-   - `Task.java` importe `jakarta.persistence.Entity` (dépendance domaine → infrastructure)
-
-### Étape 3 : Corriger la Violation
-
-1. Ouvrez `src/main/java/io/hexaglue/demo/domain/Task.java`
-2. Supprimez l'import :
-   ```java
-   import jakarta.persistence.Entity;
-   ```
-3. Relancez :
-   ```bash
-   mvn clean verify
-   ```
-4. **Le build passe !** L'audit est satisfait.
-
-### Étape 4 : Générer l'Infrastructure JPA
-
-1. Dans `pom.xml`, décommentez le plugin `hexaglue-plugin-jpa`
-2. Lancez :
-   ```bash
-   mvn clean compile
-   ```
-3. Consultez le code généré dans `target/generated-sources/hexaglue/`
-   - `TaskEntity.java` : Entité JPA
-   - `TaskJpaRepository.java` : Repository Spring Data
-   - `TaskRepositoryAdapter.java` : Adapter implémentant le port
-
-### Étape 5 : Vérifier avec les Tests
-
-1. Lancez les tests d'intégration :
-   ```bash
-   mvn test
-   ```
-2. Les tests écrivent et lisent dans la base H2 via l'infrastructure générée.
-
-### Étape 6 : Démarrer l'Application
+### Etape 1 : Cloner le projet
 
 ```bash
-mvn spring-boot:run
+git clone https://github.com/hexaglue/hexaglue-demo.git
+cd hexaglue-demo
 ```
 
-L'application démarre avec une base H2 en mémoire.
-Console H2 disponible sur : http://localhost:8080/h2-console
+### Etape 2 : Activer la Living Documentation
+
+1. Dans `pom.xml`, decommentez la dependance `hexaglue-plugin-living-doc` dans le bloc `<dependencies>` du plugin HexaGlue
+2. Lancez :
+   ```bash
+   mvn clean compile
+   ```
+3. Consultez la documentation generee dans `target/hexaglue/reports/living-doc/`
+
+### Etape 3 : Activer l'Audit. Le build echoue !
+
+1. Dans `pom.xml`, decommentez la dependance `hexaglue-plugin-audit`
+2. Lancez :
+   ```bash
+   mvn clean verify -DskipTests
+   ```
+   L'option `-DskipTests` est necessaire car les tests echoueraient : l'infrastructure JPA n'est pas encore generee.
+3. **Le build echoue !** L'audit detecte une violation architecturale :
+   - `Task.java` importe `jakarta.persistence.Entity` (dependance domaine vers infrastructure)
+
+### Etape 4 : Corriger la violation
+
+1. Ouvrez `src/main/java/io/hexaglue/demo/domain/Task.java`
+2. Supprimez l'annotation `@Entity` sur la classe
+3. Supprimez l'import `jakarta.persistence.Entity`
+4. Relancez :
+   ```bash
+   mvn clean verify -DskipTests
+   ```
+5. **Le build passe !** L'audit est satisfait.
+
+### Etape 5 : Generer l'infrastructure JPA
+
+1. Dans `pom.xml`, decommentez la dependance `hexaglue-plugin-jpa`
+2. Lancez :
+   ```bash
+   mvn clean verify
+   ```
+3. HexaGlue genere automatiquement dans `target/hexaglue/generated-sources/` :
+   - `TaskEntity.java` : Entite JPA
+   - `TaskJpaRepository.java` : Repository Spring Data
+   - `TaskMapper.java` : Mapper domaine/entite
+   - `TaskRepositoryAdapter.java` : Adapter implementant le port driven
+
+   Les sources generees sont ajoutees automatiquement au classpath grace a `<extensions>true</extensions>`.
+4. Les tests d'integration passent et l'audit valide l'architecture finale.
 
 ---
 
-## Résumé
+## Resume
 
-| Étape | Action | Résultat |
+| Etape | Action | Resultat |
 |-------|--------|----------|
-| 1 | Living Doc | Documentation générée |
-| 2 | Audit | Violation détectée |
-| 3 | Correction | Build vert |
-| 4 | JPA Generation | Infrastructure générée |
-| 5 | Tests | Persistence fonctionnelle |
-| 6 | Run | Application démarrée |
+| 1 | Clone | Projet pret |
+| 2 | Living Doc | Documentation generee |
+| 3 | Audit | Violation detectee |
+| 4 | Correction | Build vert |
+| 5 | JPA + Tests | Infrastructure generee, tests OK |
 
 ---
 
 ## Ressources
 
-- [Documentation HexaGlue](https://hexaglue.io/getting-started/)
+- [Guide de demarrage rapide](https://hexaglue.io/docs/getting-started/)
 - [GitHub HexaGlue](https://github.com/hexaglue/hexaglue)

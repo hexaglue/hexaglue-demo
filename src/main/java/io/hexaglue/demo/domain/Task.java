@@ -29,10 +29,23 @@ public class Task {
     }
 
     /**
-     * Constructeur pour la reconstitution depuis la persistence.
+     * Reconstitue une tâche depuis la persistence.
+     *
+     * @param id l'identifiant de la tâche
+     * @param title le titre de la tâche
+     * @param description la description de la tâche
+     * @param status le statut actuel
+     * @param createdAt la date de création
+     * @param updatedAt la date de dernière modification
+     * @return la tâche reconstituée
      */
-    public Task(TaskId id, String title, String description, TaskStatus status,
-                Instant createdAt, Instant updatedAt) {
+    public static Task reconstitute(TaskId id, String title, String description,
+                                    TaskStatus status, Instant createdAt, Instant updatedAt) {
+        return new Task(id, title, description, status, createdAt, updatedAt);
+    }
+
+    Task(TaskId id, String title, String description, TaskStatus status,
+         Instant createdAt, Instant updatedAt) {
         this.id = id;
         this.title = title;
         this.description = description;
