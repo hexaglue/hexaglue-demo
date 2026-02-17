@@ -62,6 +62,7 @@
                 <extensions>true</extensions>
                 <configuration>
                     <basePackage>io.hexaglue.demo</basePackage>
+                    <errorOnCritical>true</errorOnCritical>
                 </configuration>
                 <dependencies>
                     <!-- Étape 2 : Living Documentation -->
