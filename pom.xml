@@ -58,7 +58,7 @@
             <plugin>
                 <groupId>io.hexaglue</groupId>
                 <artifactId>hexaglue-maven-plugin</artifactId>
-                <version>5.1.0</version>
+                <version>6.0.0</version>
                 <extensions>true</extensions>
                 <configuration>
                     <basePackage>io.hexaglue.demo</basePackage>
@@ -70,7 +70,7 @@
                     <dependency>
                         <groupId>io.hexaglue.plugins</groupId>
                         <artifactId>hexaglue-plugin-living-doc</artifactId>
-                        <version>2.1.0</version>
+                        <version>3.0.0</version>
                     </dependency>
                     -->
                     <!-- Étape 3 : Audit d'architecture -->
@@ -78,7 +78,7 @@
                     <dependency>
                         <groupId>io.hexaglue.plugins</groupId>
                         <artifactId>hexaglue-plugin-audit</artifactId>
-                        <version>2.1.0</version>
+                        <version>3.0.0</version>
                     </dependency>
                     -->
                     <!-- Étape 5 : Génération JPA -->
@@ -86,7 +86,7 @@
                     <dependency>
                         <groupId>io.hexaglue.plugins</groupId>
                         <artifactId>hexaglue-plugin-jpa</artifactId>
-                        <version>2.1.0</version>
+                        <version>3.0.0</version>
                     </dependency>
                     -->
                 </dependencies>
