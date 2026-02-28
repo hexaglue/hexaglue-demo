@@ -69,21 +69,38 @@ cd hexaglue-demo
    ```
 5. **The build passes!** The audit is satisfied.
 
-### Step 5: Generate JPA infrastructure
+### Step 5: Generate the infrastructure
 
-1. In `pom.xml`, uncomment the `hexaglue-plugin-jpa` dependency
+1. In `pom.xml`, uncomment the `hexaglue-plugin-jpa` and `hexaglue-plugin-rest` dependencies
 2. Run:
    ```bash
    mvn clean verify
    ```
-3. HexaGlue automatically generates the following in `target/hexaglue/generated-sources/`:
+3. HexaGlue automatically generates the following in `target/generated-sources/hexaglue/`:
+
+   **JPA** (driven adapter from `TaskRepository` port):
    - `TaskEntity.java`: JPA entity
    - `TaskJpaRepository.java`: Spring Data repository
    - `TaskMapper.java`: Domain/entity mapper
    - `TaskRepositoryAdapter.java`: Adapter implementing the driven port
 
+   **REST** (driving adapter from `TaskUseCases` port):
+   - `TaskController.java`: REST controller with 6 endpoints
+   - `CreateTaskRequest.java`: Request DTO with bean validation
+   - `TaskResponse.java`: Response DTO with `from()` factory method
+   - `GlobalExceptionHandler.java`: Centralized exception handling
+   - `RestConfiguration.java`: Spring `@Configuration` with `@Bean` for `TaskUseCases`
+
+   The REST plugin derives HTTP verbs automatically from use case signatures:
+   - `createTask` → `POST /api/tasks` (201)
+   - `getTask` → `GET /api/tasks/{id}` (200)
+   - `listAllTasks` → `GET /api/tasks` (200)
+   - `startTask` → `POST /api/tasks/{id}/start-task` (204)
+   - `completeTask` → `POST /api/tasks/{id}/complete-task` (204)
+   - `deleteTask` → `DELETE /api/tasks/{id}` (204)
+
    Generated sources are automatically added to the classpath thanks to `<extensions>true</extensions>`.
-4. Integration tests pass and the audit validates the final architecture.
+4. Integration tests pass, the audit validates the final architecture, and OpenAPI documentation is available at `http://localhost:8080/swagger-ui.html`.
 
 ---
 
@@ -95,7 +112,7 @@ cd hexaglue-demo
 | 2 | Living Doc | Documentation generated |
 | 3 | Audit | Violation detected |
 | 4 | Fix | Green build |
-| 5 | JPA + Tests | Infrastructure generated, tests OK |
+| 5 | JPA + REST | Infrastructure generated, tests OK |
 
 ---
 

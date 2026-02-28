@@ -24,6 +24,7 @@
         <java.version>17</java.version>
         <maven.compiler.release>17</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven-compiler-plugin.version>3.14.1</maven-compiler-plugin.version>
     </properties>
 
     <dependencies>
@@ -33,7 +34,16 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>2.3.0</version>
         </dependency>
         <dependency>
             <groupId>com.h2database</groupId>
@@ -58,7 +68,7 @@
             <plugin>
                 <groupId>io.hexaglue</groupId>
                 <artifactId>hexaglue-maven-plugin</artifactId>
-                <version>6.0.0</version>
+                <version>6.1.0</version>
                 <extensions>true</extensions>
                 <configuration>
                     <basePackage>io.hexaglue.demo</basePackage>
@@ -66,29 +76,28 @@
                 </configuration>
                 <dependencies>
                     <!-- Étape 2 : Living Documentation -->
-                    <!--
-                    <dependency>
+                    <!-- <dependency>
                         <groupId>io.hexaglue.plugins</groupId>
                         <artifactId>hexaglue-plugin-living-doc</artifactId>
-                        <version>3.0.0</version>
-                    </dependency>
-                    -->
+                        <version>3.1.0</version>
+                    </dependency> -->
                     <!-- Étape 3 : Audit d'architecture -->
-                    <!--
-                    <dependency>
+                    <!-- <dependency>
                         <groupId>io.hexaglue.plugins</groupId>
                         <artifactId>hexaglue-plugin-audit</artifactId>
-                        <version>3.0.0</version>
-                    </dependency>
-                    -->
-                    <!-- Étape 5 : Génération JPA -->
-                    <!--
-                    <dependency>
+                        <version>3.1.0</version>
+                    </dependency> -->
+                    <!-- Étape 5 : Génération de code (JPA + REST) -->
+                    <!-- <dependency>
                         <groupId>io.hexaglue.plugins</groupId>
                         <artifactId>hexaglue-plugin-jpa</artifactId>
-                        <version>3.0.0</version>
+                        <version>3.1.0</version>
                     </dependency>
-                    -->
+                    <dependency>
+                        <groupId>io.hexaglue.plugins</groupId>
+                        <artifactId>hexaglue-plugin-rest</artifactId>
+                        <version>3.1.0</version>
+                    </dependency> -->
                 </dependencies>
             </plugin>
 

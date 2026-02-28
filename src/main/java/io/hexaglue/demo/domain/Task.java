@@ -1,7 +1,8 @@
 package io.hexaglue.demo.domain;
 
-import jakarta.persistence.Entity;
 import java.time.Instant;
+
+import jakarta.persistence.Entity;
 
 /**
  * Agrégat racine représentant une tâche.
